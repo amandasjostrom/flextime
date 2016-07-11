@@ -12,9 +12,11 @@ public class Calculator {
         if (minutes == 0) {
             return "0h";
         }
-        final long hourPart = TimeUnit.MINUTES.toHours(minutes);
-        final long minutePart = minutes - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(minutes));
-        return (hourPart != 0 ? hourPart + "h" : "") + (minutePart != 0 ? minutePart + "m" : "");
+        long hourPart = TimeUnit.MINUTES.toHours(minutes);
+        long minutePart = minutes - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(minutes));
+        String result = (hourPart != 0 ? hourPart + "h" : "") + " " + (minutePart != 0 ? minutePart + "m" : "");
+        result = result.replace("-", "");
+        return minutes < 0 ? "-" + result : result;
     }
 
     public static int stringToInt(String timeString) {
