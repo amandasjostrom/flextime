@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/timeOverview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:paddingTop="65dp"
+        android:paddingBottom="65dp">
 
         <TextView
             android:id="@+id/tvTime"
@@ -19,26 +19,56 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:layout_weight="0.5"
             android:text="1h23m"
-            android:textSize="40sp" />
+            android:textSize="50sp"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/btSubtract"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:text="-"
+            android:layout_weight="0.32"
+            android:textColor="@android:color/white"
+            android:textSize="30sp" />
 
         <NumberPicker
             android:id="@+id/timePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.36" />
+
+        <Button
+            android:id="@+id/btAdd"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:text="+"
+            android:layout_weight="0.32"
+            android:textColor="@android:color/white"
+            android:textSize="30sp" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btCommit"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
+    <TextView
+        android:id="@+id/lastUpdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Last updated: Never"
         android:layout_gravity="center"
-        android:layout_margin="13dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/commit"
-        android:textColor="#FFFFFF" />
+        android:textColor="@android:color/darker_gray" />
 
 </LinearLayout>
