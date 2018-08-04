@@ -11,15 +11,25 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.joda.time.Duration;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
+
+import java.util.concurrent.TimeUnit;
+
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String[] NUMBERS = Calculator.buildPickerNumbers();
+    private static final PeriodFormatter TIME_FORMATTER = new PeriodFormatterBuilder()
+            .appendHours()
+            .appendSuffix("h")
+            .appendMinutes()
+            .appendSuffix("m")
+            .toFormatter();
 
     private ApplicationStorage applicationStorage;
     private NumberPicker numberPicker;
-    private Button btAdd;
-    private Button btSubtract;
     private TextView tvTime;
     private TextView lastUpdated;
     private LinearLayout timeOverview;
@@ -38,35 +48,29 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupAddButton() {
-        btAdd = (Button) findViewById(R.id.btAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.btAdd)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int newTime = Calculator.stringToInt(
                         NUMBERS[numberPicker.getValue()]
                 );
-                int oldTime = applicationStorage.loadTime();
-                if (applicationStorage.saveTime(oldTime + newTime)) {
-                    updateTimeOverview();
-                    resetPicker();
-                }
+                applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(newTime)), false);
+                updateTimeOverview();
+                resetPicker();
             }
         });
     }
 
     private void setupSubtractButton() {
-        btSubtract = (Button) findViewById(R.id.btSubtract);
-        btSubtract.setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.btSubtract)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int newTime = Calculator.stringToInt(
                         NUMBERS[numberPicker.getValue()]
                 );
-                int oldTime = applicationStorage.loadTime();
-                if (applicationStorage.saveTime(oldTime - newTime)) {
-                    updateTimeOverview();
-                    resetPicker();
-                }
+                applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(newTime)), true);
+                updateTimeOverview();
+                resetPicker();
             }
         });
     }
@@ -98,18 +102,18 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateTimeOverview() {
-        final int minutes = applicationStorage.loadTime();
-        tvTime.setText(Calculator.intMinutesToString(minutes));
-        timeOverview.setBackgroundResource(minutes < 0 ? R.drawable.fade_red : R.drawable.fade_green);
-        lastUpdated.setText(getString(R.string.last_updated) + " " + applicationStorage.loadModified());
+        Duration minutes = applicationStorage.loadTime();
+        tvTime.setText(TIME_FORMATTER.print(minutes.toPeriod()));
+        timeOverview.setBackgroundResource(minutes.getMillis() < 0 ? R.drawable.fade_red : R.drawable.fade_green);
+        lastUpdated.setText(getString(R.string.last_updated) + ": " + applicationStorage.loadModified());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_about) {
-            Toast.makeText(this, "Flextime 1.1 by Joakim Lahtinen", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Flextime 1.2 by Joakim Lahtinen", Toast.LENGTH_LONG).show();
         } else if (item.getItemId() == R.id.action_reset) {
-            applicationStorage.saveTime(0);
+            applicationStorage.reset();
             updateTimeOverview();
             resetPicker();
         }

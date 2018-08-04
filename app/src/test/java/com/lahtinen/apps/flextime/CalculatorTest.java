@@ -24,22 +24,6 @@ public class CalculatorTest {
     }
 
     @Test
-    public void intMinutesToString_positiveMinutes() throws Exception {
-        assertThat(Calculator.intMinutesToString(0), is("0h"));
-        assertThat(Calculator.intMinutesToString(15), is("15m"));
-        assertThat(Calculator.intMinutesToString(60), is("1h"));
-        assertThat(Calculator.intMinutesToString(75), is("1h15m"));
-    }
-
-    @Test
-    public void intMinutesToString_negativeMinutes() throws Exception {
-        assertThat(Calculator.intMinutesToString(0), is("0h"));
-        assertThat(Calculator.intMinutesToString(-15), is("-15m"));
-        assertThat(Calculator.intMinutesToString(-60), is("-1h"));
-        assertThat(Calculator.intMinutesToString(-75), is("-1h15m"));
-    }
-
-    @Test
     public void buildPickerNumbers() throws Exception {
         System.out.println(Calculator.buildPickerNumbers().length);
     }

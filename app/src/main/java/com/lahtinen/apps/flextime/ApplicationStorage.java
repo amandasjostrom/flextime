@@ -3,38 +3,45 @@ package com.lahtinen.apps.flextime;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 public class ApplicationStorage {
 
-    public static final String TIME = "time";
-    public static final String MODIFIED = "modified";
+    private static final String TIME = "time";
+    private static final String MODIFIED = "modified";
 
     private final SharedPreferences storage;
 
-    public ApplicationStorage(Context context) {
+    ApplicationStorage(Context context) {
         storage = context.getSharedPreferences("flextime", Context.MODE_PRIVATE);
     }
 
-    public boolean saveTime(int value) {
+    public void updateTime(Duration adjustment, boolean isNegative) {
         SharedPreferences.Editor editor = storage.edit();
-        editor.putInt(TIME, value);
+        Duration newDuration = isNegative ? loadTime().minus(adjustment) : loadTime().plus(adjustment);
+        editor.putString(TIME, newDuration.toString());
         updateUpdated();
-        return editor.commit();
+        editor.apply();
     }
 
-    public int loadTime() {
-        return storage.getInt(TIME, 0);
+    public Duration loadTime() {
+        return Duration.parse(storage.getString(TIME, Duration.ZERO.toString()));
     }
 
-    public boolean updateUpdated() {
+    private void updateUpdated() {
         SharedPreferences.Editor editor = storage.edit();
-        editor.putString(MODIFIED, new SimpleDateFormat("HH:mm dd/MM").format(new Date()));
-        return editor.commit();
+        editor.putString(MODIFIED, DateTime.now().toString("HH:mm dd/MM"));
+        editor.apply();
     }
 
     public String loadModified() {
         return storage.getString(MODIFIED, "Never");
+    }
+
+    public void reset() {
+        SharedPreferences.Editor editor = storage.edit();
+        editor.clear();
+        editor.apply();
     }
 }

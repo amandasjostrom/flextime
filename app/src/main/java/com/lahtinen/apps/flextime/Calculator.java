@@ -2,22 +2,10 @@ package com.lahtinen.apps.flextime;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.Integer.parseInt;
 
 public class Calculator {
-
-    public static String intMinutesToString(int minutes) {
-        if (minutes == 0) {
-            return "0h";
-        }
-        long hourPart = TimeUnit.MINUTES.toHours(minutes);
-        long minutePart = minutes - TimeUnit.HOURS.toMinutes(TimeUnit.MINUTES.toHours(minutes));
-        String result = (hourPart != 0 ? hourPart + "h" : "") + " " + (minutePart != 0 ? minutePart + "m" : "");
-        result = result.replace("-", "");
-        return minutes < 0 ? "-" + result : result;
-    }
 
     public static int stringToInt(String timeString) {
         final String[] times = timeString.split(":");
