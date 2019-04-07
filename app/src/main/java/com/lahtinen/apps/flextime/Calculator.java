@@ -9,7 +9,9 @@ public class Calculator {
 
     public static int stringToInt(String timeString) {
         final String[] times = timeString.split(":");
-        return parseInt(times[0]) * 60 + parseInt(times[1]);
+        int hours = parseInt(times[0]);
+        int minutes = parseInt(times[1]);
+        return hours * 60 + (timeString.charAt(0) == '-' ? -minutes : minutes);
     }
 
     public static String[] buildPickerNumbers() {
