@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final String[] NUMBERS = Calculator.buildPickerNumbers();
+    private static final String[] NUMBERS = Calculator.Companion.buildPickerTimes();
     private static final PeriodFormatter TIME_FORMATTER = new PeriodFormatterBuilder()
             .appendHours()
             .appendSuffix("h")
@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         ((Button) findViewById(R.id.btAdd)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newTime = Calculator.stringToInt(
+                int newTime = Calculator.Companion.stringToInt(
                         NUMBERS[numberPicker.getValue()]
                 );
                 applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(newTime)), false);
@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
         ((Button) findViewById(R.id.btSubtract)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newTime = Calculator.stringToInt(
+                int newTime = Calculator.Companion.stringToInt(
                         NUMBERS[numberPicker.getValue()]
                 );
                 applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(newTime)), true);
