@@ -16,7 +16,7 @@ class Calculator {
             val hours = listOf("00", "01", "02", "03", "04")
             val minutes = listOf("00", "15", "30", "45")
 
-            val times = Calculator.buildTime(hours, minutes)
+            val times = buildTime(hours, minutes)
             return times.reversed().toTypedArray()
         }
 
