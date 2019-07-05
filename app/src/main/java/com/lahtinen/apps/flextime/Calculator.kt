@@ -5,7 +5,7 @@ import java.lang.Integer.parseInt
 class Calculator {
 
     companion object {
-        fun stringToInt(timeString: String): Int {
+        fun timeStringToMinutesInt(timeString: String): Int {
             val times = timeString.split(":")
             val hours = parseInt(times[0])
             val minutes = parseInt(times[1])
