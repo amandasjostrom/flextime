@@ -12,27 +12,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.joda.time.Duration;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
 
 import java.util.concurrent.TimeUnit;
-
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String[] NUMBERS = Calculator.Companion.buildPickerTimes();
-    private static final PeriodFormatter TIME_FORMATTER = new PeriodFormatterBuilder()
-            .appendHours()
-            .appendSuffix("h")
-            .appendMinutes()
-            .appendSuffix("m")
-            .toFormatter();
 
     private ApplicationStorage applicationStorage;
     private NumberPicker numberPicker;
     private TextView tvTime;
     private TextView lastUpdated;
     private LinearLayout timeOverview;
+    private TimeFormatter timeFormatter = new TimeFormatter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +95,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void updateTimeOverview() {
         Duration minutes = applicationStorage.loadTime();
-        tvTime.setText(TIME_FORMATTER.print(minutes.toPeriod()));
+        tvTime.setText(timeFormatter.format(minutes));
         timeOverview.setBackgroundResource(minutes.getMillis() < 0 ? R.drawable.fade_red : R.drawable.fade_green);
         lastUpdated.setText(getString(R.string.last_updated) + ": " + applicationStorage.loadModified());
     }
