@@ -1,11 +1,10 @@
 package com.lahtinen.apps.flextime;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -18,9 +17,9 @@ import org.joda.time.format.PeriodFormatterBuilder;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private static final String[] NUMBERS = Calculator.Companion.buildPickerTimes();
+    private static final String[] NUMBER_PICKER_VALUES = Calculator.Companion.buildPickerTimes();
     private static final PeriodFormatter TIME_FORMATTER = new PeriodFormatterBuilder()
             .appendHours()
             .appendSuffix("h")
@@ -48,13 +47,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupAddButton() {
-        ((Button) findViewById(R.id.btAdd)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btAdd).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newTime = Calculator.Companion.stringToInt(
-                        NUMBERS[numberPicker.getValue()]
+                int timeToAdd = Calculator.Companion.stringToInt(
+                        NUMBER_PICKER_VALUES[numberPicker.getValue()]
                 );
-                applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(newTime)), false);
+                applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(timeToAdd)), false);
                 updateTimeOverview();
                 resetPicker();
             }
@@ -62,13 +61,13 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void setupSubtractButton() {
-        ((Button) findViewById(R.id.btSubtract)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btSubtract).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newTime = Calculator.Companion.stringToInt(
-                        NUMBERS[numberPicker.getValue()]
+                int timeToSubtract = Calculator.Companion.stringToInt(
+                        NUMBER_PICKER_VALUES[numberPicker.getValue()]
                 );
-                applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(newTime)), true);
+                applicationStorage.updateTime(new Duration(TimeUnit.MINUTES.toMillis(timeToSubtract)), true);
                 updateTimeOverview();
                 resetPicker();
             }
@@ -79,14 +78,14 @@ public class MainActivity extends ActionBarActivity {
         numberPicker = (NumberPicker) findViewById(R.id.timePicker);
         numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(NUMBERS.length - 1);
-        numberPicker.setDisplayedValues(NUMBERS);
+        numberPicker.setMaxValue(NUMBER_PICKER_VALUES.length - 1);
+        numberPicker.setDisplayedValues(NUMBER_PICKER_VALUES);
         numberPicker.setWrapSelectorWheel(false);
         resetPicker();
     }
 
     private void resetPicker() {
-        numberPicker.setValue(NUMBERS.length - 1);
+        numberPicker.setValue(NUMBER_PICKER_VALUES.length - 1);
     }
 
     @Override
@@ -113,10 +112,15 @@ public class MainActivity extends ActionBarActivity {
         if (item.getItemId() == R.id.action_about) {
             Toast.makeText(this, "Flextime 1.2 by Joakim Lahtinen", Toast.LENGTH_LONG).show();
         } else if (item.getItemId() == R.id.action_reset) {
-            applicationStorage.reset();
-            updateTimeOverview();
-            resetPicker();
+            reset();
         }
         return super.onOptionsItemSelected(item);
     }
+
+    void reset() {
+        applicationStorage.reset();
+        updateTimeOverview();
+        resetPicker();
+    }
+
 }
